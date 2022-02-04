@@ -34,13 +34,19 @@ const ShoeCard = ({
   return (
     <Link href={`/shoe/${slug}`}>
       <Wrapper>
+        {variant === 'on-sale' ? <OnSale>Sale</OnSale> : undefined}
+        {variant === 'new-release' ? <JustReleased>Just Released!</JustReleased> : undefined}
         <ImageWrapper>
           <Image alt="" src={imageSrc} />
         </ImageWrapper>
         <Spacer size={12} />
         <Row>
           <Name>{name}</Name>
-          <Price>{formatPrice(price)}</Price>
+          {variant === 'on-sale' ? (
+            <SalePrice>{formatPrice(price)}</SalePrice>
+          ) : (
+            <Price>{formatPrice(price)}</Price>
+          )}
         </Row>
         <Row>
           <ColorInfo>{pluralize('Color', numOfColors)}</ColorInfo>
@@ -55,7 +61,9 @@ const Link = styled.a`
   color: inherit;
 `;
 
-const Wrapper = styled.article``;
+const Wrapper = styled.article`
+  position: relative;
+`;
 
 const ImageWrapper = styled.div`
   position: relative;
@@ -67,6 +75,8 @@ const Image = styled.img`
 
 const Row = styled.div`
   font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
 `;
 
 const Name = styled.h3`
@@ -83,6 +93,25 @@ const ColorInfo = styled.p`
 const SalePrice = styled.span`
   font-weight: ${WEIGHTS.medium};
   color: ${COLORS.primary};
+`;
+
+const TagBase = styled.div`
+  position: absolute;
+  z-index: 1;
+  top: 12px;
+  right: -4px;
+  padding: 8px 10px;
+  font-weight: ${WEIGHTS.bold};
+  color: ${COLORS.white};
+  border-radius: 2px;
+`;
+
+const OnSale = styled(TagBase)`
+  background-color: ${COLORS.primary};
+`;
+
+const JustReleased = styled(TagBase)`
+  background-color: ${COLORS.secondary};
 `;
 
 export default ShoeCard;
